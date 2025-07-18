@@ -14,16 +14,836 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      catalogue: {
+        Row: {
+          classification: string | null
+          commentaires: string | null
+          created_at: string | null
+          description: string | null
+          fiche_produit: string | null
+          id: string
+          lien_pdf: string | null
+          nom: string
+          prix_unitaire_ht: number | null
+          reference: string
+          statut: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          classification?: string | null
+          commentaires?: string | null
+          created_at?: string | null
+          description?: string | null
+          fiche_produit?: string | null
+          id?: string
+          lien_pdf?: string | null
+          nom: string
+          prix_unitaire_ht?: number | null
+          reference: string
+          statut?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          classification?: string | null
+          commentaires?: string | null
+          created_at?: string | null
+          description?: string | null
+          fiche_produit?: string | null
+          id?: string
+          lien_pdf?: string | null
+          nom?: string
+          prix_unitaire_ht?: number | null
+          reference?: string
+          statut?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      contacts: {
+        Row: {
+          canal_acquisition: string | null
+          collaborateur_id: string | null
+          commentaires: string | null
+          created_at: string | null
+          date_acquisition: string | null
+          email: string | null
+          entreprise_id: string | null
+          id: string
+          nom: string
+          prenom: string | null
+          statut: string | null
+          tags: string[] | null
+          telephone: string | null
+          type: Database["public"]["Enums"]["contact_type"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          canal_acquisition?: string | null
+          collaborateur_id?: string | null
+          commentaires?: string | null
+          created_at?: string | null
+          date_acquisition?: string | null
+          email?: string | null
+          entreprise_id?: string | null
+          id?: string
+          nom: string
+          prenom?: string | null
+          statut?: string | null
+          tags?: string[] | null
+          telephone?: string | null
+          type?: Database["public"]["Enums"]["contact_type"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          canal_acquisition?: string | null
+          collaborateur_id?: string | null
+          commentaires?: string | null
+          created_at?: string | null
+          date_acquisition?: string | null
+          email?: string | null
+          entreprise_id?: string | null
+          id?: string
+          nom?: string
+          prenom?: string | null
+          statut?: string | null
+          tags?: string[] | null
+          telephone?: string | null
+          type?: Database["public"]["Enums"]["contact_type"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contacts_collaborateur_id_fkey"
+            columns: ["collaborateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contacts_entreprise_id_fkey"
+            columns: ["entreprise_id"]
+            isOneToOne: false
+            referencedRelation: "entreprises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      devis: {
+        Row: {
+          canal_acquisition: string | null
+          commentaires: string | null
+          contact_id: string | null
+          created_at: string | null
+          date_emission: string | null
+          entreprise_id: string | null
+          id: string
+          montant_ht: number | null
+          montant_ttc: number | null
+          montant_tva: number | null
+          numero_devis: string
+          statut: Database["public"]["Enums"]["devis_status"] | null
+          updated_at: string | null
+          verrouille: boolean | null
+        }
+        Insert: {
+          canal_acquisition?: string | null
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_emission?: string | null
+          entreprise_id?: string | null
+          id?: string
+          montant_ht?: number | null
+          montant_ttc?: number | null
+          montant_tva?: number | null
+          numero_devis: string
+          statut?: Database["public"]["Enums"]["devis_status"] | null
+          updated_at?: string | null
+          verrouille?: boolean | null
+        }
+        Update: {
+          canal_acquisition?: string | null
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_emission?: string | null
+          entreprise_id?: string | null
+          id?: string
+          montant_ht?: number | null
+          montant_ttc?: number | null
+          montant_tva?: number | null
+          numero_devis?: string
+          statut?: Database["public"]["Enums"]["devis_status"] | null
+          updated_at?: string | null
+          verrouille?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "devis_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devis_entreprise_id_fkey"
+            columns: ["entreprise_id"]
+            isOneToOne: false
+            referencedRelation: "entreprises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      devis_items: {
+        Row: {
+          catalogue_id: string | null
+          created_at: string | null
+          devis_id: string | null
+          id: string
+          prix_unitaire: number | null
+          quantite: number
+          remise: number | null
+        }
+        Insert: {
+          catalogue_id?: string | null
+          created_at?: string | null
+          devis_id?: string | null
+          id?: string
+          prix_unitaire?: number | null
+          quantite?: number
+          remise?: number | null
+        }
+        Update: {
+          catalogue_id?: string | null
+          created_at?: string | null
+          devis_id?: string | null
+          id?: string
+          prix_unitaire?: number | null
+          quantite?: number
+          remise?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "devis_items_catalogue_id_fkey"
+            columns: ["catalogue_id"]
+            isOneToOne: false
+            referencedRelation: "catalogue"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devis_items_devis_id_fkey"
+            columns: ["devis_id"]
+            isOneToOne: false
+            referencedRelation: "devis"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      entreprises: {
+        Row: {
+          adresse: string | null
+          banque: string | null
+          bic: string | null
+          code_postal: string | null
+          commentaires: string | null
+          created_at: string | null
+          iban: string | null
+          id: string
+          raison_sociale: string
+          secteur: string | null
+          siren: string | null
+          siret: string | null
+          site_web: string | null
+          taille: string | null
+          tva: string | null
+          type_relation: string | null
+          updated_at: string | null
+          ville: string | null
+        }
+        Insert: {
+          adresse?: string | null
+          banque?: string | null
+          bic?: string | null
+          code_postal?: string | null
+          commentaires?: string | null
+          created_at?: string | null
+          iban?: string | null
+          id?: string
+          raison_sociale: string
+          secteur?: string | null
+          siren?: string | null
+          siret?: string | null
+          site_web?: string | null
+          taille?: string | null
+          tva?: string | null
+          type_relation?: string | null
+          updated_at?: string | null
+          ville?: string | null
+        }
+        Update: {
+          adresse?: string | null
+          banque?: string | null
+          bic?: string | null
+          code_postal?: string | null
+          commentaires?: string | null
+          created_at?: string | null
+          iban?: string | null
+          id?: string
+          raison_sociale?: string
+          secteur?: string | null
+          siren?: string | null
+          siret?: string | null
+          site_web?: string | null
+          taille?: string | null
+          tva?: string | null
+          type_relation?: string | null
+          updated_at?: string | null
+          ville?: string | null
+        }
+        Relationships: []
+      }
+      factures: {
+        Row: {
+          commentaires: string | null
+          conditions_paiement: string | null
+          contact_id: string | null
+          created_at: string | null
+          date_echeance: string | null
+          date_emission: string | null
+          devis_id: string | null
+          entreprise_id: string | null
+          id: string
+          montant_ht: number | null
+          montant_ttc: number | null
+          montant_tva: number | null
+          numero_facture: string
+          prestation_id: string | null
+          statut: Database["public"]["Enums"]["facture_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          commentaires?: string | null
+          conditions_paiement?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_echeance?: string | null
+          date_emission?: string | null
+          devis_id?: string | null
+          entreprise_id?: string | null
+          id?: string
+          montant_ht?: number | null
+          montant_ttc?: number | null
+          montant_tva?: number | null
+          numero_facture: string
+          prestation_id?: string | null
+          statut?: Database["public"]["Enums"]["facture_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          commentaires?: string | null
+          conditions_paiement?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_echeance?: string | null
+          date_emission?: string | null
+          devis_id?: string | null
+          entreprise_id?: string | null
+          id?: string
+          montant_ht?: number | null
+          montant_ttc?: number | null
+          montant_tva?: number | null
+          numero_facture?: string
+          prestation_id?: string | null
+          statut?: Database["public"]["Enums"]["facture_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "factures_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "factures_devis_id_fkey"
+            columns: ["devis_id"]
+            isOneToOne: false
+            referencedRelation: "devis"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "factures_entreprise_id_fkey"
+            columns: ["entreprise_id"]
+            isOneToOne: false
+            referencedRelation: "entreprises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "factures_prestation_id_fkey"
+            columns: ["prestation_id"]
+            isOneToOne: false
+            referencedRelation: "prestations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interactions: {
+        Row: {
+          collaborateur_id: string | null
+          commentaires: string | null
+          contact_id: string | null
+          created_at: string | null
+          date_interaction: string | null
+          description: string | null
+          entreprise_id: string | null
+          heure: string | null
+          id: string
+          lien_visio: string | null
+          type: Database["public"]["Enums"]["interaction_type"]
+          updated_at: string | null
+        }
+        Insert: {
+          collaborateur_id?: string | null
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_interaction?: string | null
+          description?: string | null
+          entreprise_id?: string | null
+          heure?: string | null
+          id?: string
+          lien_visio?: string | null
+          type: Database["public"]["Enums"]["interaction_type"]
+          updated_at?: string | null
+        }
+        Update: {
+          collaborateur_id?: string | null
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_interaction?: string | null
+          description?: string | null
+          entreprise_id?: string | null
+          heure?: string | null
+          id?: string
+          lien_visio?: string | null
+          type?: Database["public"]["Enums"]["interaction_type"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interactions_collaborateur_id_fkey"
+            columns: ["collaborateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "interactions_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "interactions_entreprise_id_fkey"
+            columns: ["entreprise_id"]
+            isOneToOne: false
+            referencedRelation: "entreprises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kpi: {
+        Row: {
+          analyse_data: string | null
+          canaux: string[] | null
+          collaborateur_id: string | null
+          created_at: string | null
+          date_expiration: string | null
+          date_revision: string | null
+          designation: string
+          id: string
+          reference: string
+          updated_at: string | null
+          valeur: number | null
+        }
+        Insert: {
+          analyse_data?: string | null
+          canaux?: string[] | null
+          collaborateur_id?: string | null
+          created_at?: string | null
+          date_expiration?: string | null
+          date_revision?: string | null
+          designation: string
+          id?: string
+          reference: string
+          updated_at?: string | null
+          valeur?: number | null
+        }
+        Update: {
+          analyse_data?: string | null
+          canaux?: string[] | null
+          collaborateur_id?: string | null
+          created_at?: string | null
+          date_expiration?: string | null
+          date_revision?: string | null
+          designation?: string
+          id?: string
+          reference?: string
+          updated_at?: string | null
+          valeur?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kpi_collaborateur_id_fkey"
+            columns: ["collaborateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paiements: {
+        Row: {
+          commentaires: string | null
+          contact_id: string | null
+          created_at: string | null
+          date_paiement: string | null
+          entreprise_id: string | null
+          facture_id: string | null
+          id: string
+          montant: number | null
+          reference_paiement: string
+          reste_a_payer: number | null
+          statut: Database["public"]["Enums"]["paiement_status"] | null
+          type_paiement: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_paiement?: string | null
+          entreprise_id?: string | null
+          facture_id?: string | null
+          id?: string
+          montant?: number | null
+          reference_paiement: string
+          reste_a_payer?: number | null
+          statut?: Database["public"]["Enums"]["paiement_status"] | null
+          type_paiement?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_paiement?: string | null
+          entreprise_id?: string | null
+          facture_id?: string | null
+          id?: string
+          montant?: number | null
+          reference_paiement?: string
+          reste_a_payer?: number | null
+          statut?: Database["public"]["Enums"]["paiement_status"] | null
+          type_paiement?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paiements_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paiements_entreprise_id_fkey"
+            columns: ["entreprise_id"]
+            isOneToOne: false
+            referencedRelation: "entreprises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paiements_facture_id_fkey"
+            columns: ["facture_id"]
+            isOneToOne: false
+            referencedRelation: "factures"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prestations: {
+        Row: {
+          commentaires: string | null
+          contact_id: string | null
+          created_at: string | null
+          date_debut: string | null
+          date_fin: string | null
+          designation: string
+          devis_id: string | null
+          entreprise_id: string | null
+          id: string
+          intervenants: string[] | null
+          localisation: string | null
+          montant: number | null
+          reference: string
+          statut: Database["public"]["Enums"]["prestation_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_debut?: string | null
+          date_fin?: string | null
+          designation: string
+          devis_id?: string | null
+          entreprise_id?: string | null
+          id?: string
+          intervenants?: string[] | null
+          localisation?: string | null
+          montant?: number | null
+          reference: string
+          statut?: Database["public"]["Enums"]["prestation_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          date_debut?: string | null
+          date_fin?: string | null
+          designation?: string
+          devis_id?: string | null
+          entreprise_id?: string | null
+          id?: string
+          intervenants?: string[] | null
+          localisation?: string | null
+          montant?: number | null
+          reference?: string
+          statut?: Database["public"]["Enums"]["prestation_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prestations_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prestations_devis_id_fkey"
+            columns: ["devis_id"]
+            isOneToOne: false
+            referencedRelation: "devis"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prestations_entreprise_id_fkey"
+            columns: ["entreprise_id"]
+            isOneToOne: false
+            referencedRelation: "entreprises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          competences: string[] | null
+          created_at: string | null
+          date_arrivee: string | null
+          date_depart: string | null
+          email: string
+          fonction: string | null
+          id: string
+          nom: string
+          prenom: string
+          role: Database["public"]["Enums"]["user_role"] | null
+          statut: string | null
+          tags: string[] | null
+          telephone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          competences?: string[] | null
+          created_at?: string | null
+          date_arrivee?: string | null
+          date_depart?: string | null
+          email: string
+          fonction?: string | null
+          id: string
+          nom: string
+          prenom: string
+          role?: Database["public"]["Enums"]["user_role"] | null
+          statut?: string | null
+          tags?: string[] | null
+          telephone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          competences?: string[] | null
+          created_at?: string | null
+          date_arrivee?: string | null
+          date_depart?: string | null
+          email?: string
+          fonction?: string | null
+          id?: string
+          nom?: string
+          prenom?: string
+          role?: Database["public"]["Enums"]["user_role"] | null
+          statut?: string | null
+          tags?: string[] | null
+          telephone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      reclamations: {
+        Row: {
+          commentaires: string | null
+          contact_id: string | null
+          created_at: string | null
+          description: string | null
+          entreprise_id: string | null
+          id: string
+          numero_reclamation: string
+          statut: Database["public"]["Enums"]["reclamation_status"] | null
+          theme: string | null
+          type_theme: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          entreprise_id?: string | null
+          id?: string
+          numero_reclamation: string
+          statut?: Database["public"]["Enums"]["reclamation_status"] | null
+          theme?: string | null
+          type_theme?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          commentaires?: string | null
+          contact_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          entreprise_id?: string | null
+          id?: string
+          numero_reclamation?: string
+          statut?: Database["public"]["Enums"]["reclamation_status"] | null
+          theme?: string | null
+          type_theme?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reclamations_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reclamations_entreprise_id_fkey"
+            columns: ["entreprise_id"]
+            isOneToOne: false
+            referencedRelation: "entreprises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      taches: {
+        Row: {
+          collaborateur_id: string | null
+          commentaires: string | null
+          created_at: string | null
+          date_debut: string | null
+          date_echeance: string | null
+          date_fin: string | null
+          description: string | null
+          id: string
+          nom: string
+          reference: string
+          statut: Database["public"]["Enums"]["tache_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          collaborateur_id?: string | null
+          commentaires?: string | null
+          created_at?: string | null
+          date_debut?: string | null
+          date_echeance?: string | null
+          date_fin?: string | null
+          description?: string | null
+          id?: string
+          nom: string
+          reference: string
+          statut?: Database["public"]["Enums"]["tache_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          collaborateur_id?: string | null
+          commentaires?: string | null
+          created_at?: string | null
+          date_debut?: string | null
+          date_echeance?: string | null
+          date_fin?: string | null
+          description?: string | null
+          id?: string
+          nom?: string
+          reference?: string
+          statut?: Database["public"]["Enums"]["tache_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "taches_collaborateur_id_fkey"
+            columns: ["collaborateur_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { user_id: string }
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
     }
     Enums: {
-      [_ in never]: never
+      contact_type: "particulier" | "entreprise"
+      devis_status: "brouillon" | "envoye" | "accepte" | "refuse" | "expire"
+      facture_status:
+        | "brouillon"
+        | "envoyee"
+        | "payee"
+        | "en_retard"
+        | "annulee"
+      interaction_type:
+        | "email"
+        | "appel"
+        | "tchat"
+        | "reunion_presentiel"
+        | "reunion_distanciel"
+        | "formulaire"
+        | "rencontre"
+      paiement_status: "en_attente" | "recu" | "rapproche"
+      prestation_status: "planifie" | "en_cours" | "termine" | "annule"
+      reclamation_status: "prise_en_compte" | "en_cours" | "traitee" | "rejetee"
+      tache_status: "a_faire" | "en_cours" | "terminee" | "annulee"
+      user_role: "admin" | "manager" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +970,24 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      contact_type: ["particulier", "entreprise"],
+      devis_status: ["brouillon", "envoye", "accepte", "refuse", "expire"],
+      facture_status: ["brouillon", "envoyee", "payee", "en_retard", "annulee"],
+      interaction_type: [
+        "email",
+        "appel",
+        "tchat",
+        "reunion_presentiel",
+        "reunion_distanciel",
+        "formulaire",
+        "rencontre",
+      ],
+      paiement_status: ["en_attente", "recu", "rapproche"],
+      prestation_status: ["planifie", "en_cours", "termine", "annule"],
+      reclamation_status: ["prise_en_compte", "en_cours", "traitee", "rejetee"],
+      tache_status: ["a_faire", "en_cours", "terminee", "annulee"],
+      user_role: ["admin", "manager", "user"],
+    },
   },
 } as const

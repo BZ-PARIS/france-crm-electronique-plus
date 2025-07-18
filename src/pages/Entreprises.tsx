@@ -27,10 +27,7 @@ import {
 import { 
   Plus, 
   Search, 
-  Filter, 
   MoreHorizontal,
-  Mail,
-  Phone,
   Building2,
   MapPin,
   Globe,
@@ -41,87 +38,21 @@ import {
   Briefcase,
   Handshake,
   Truck,
-  CircleDollarSign
+  CircleDollarSign,
+  Loader2,
+  AlertTriangle
 } from "lucide-react"
+import { useEntreprises } from "@/hooks/useEntreprises"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function Entreprises() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterType, setFilterType] = useState("all")
   const [filterSecteur, setFilterSecteur] = useState("all")
 
-  // Données d'exemple
-  const entreprises = [
-    {
-      id: 1,
-      raisonSociale: "ACME Corporation",
-      siren: "123456789",
-      siret: "12345678900001",
-      tva: "FR12345678900",
-      type: "client",
-      secteur: "industrie",
-      taille: "grande",
-      adresse: "123 Avenue de la République",
-      codePostal: "75011",
-      ville: "Paris",
-      siteWeb: "https://www.acme-corp.fr",
-      contacts: 3,
-      dateAjout: "2024-01-05",
-      tags: ["VIP", "International"]
-    },
-    {
-      id: 2,
-      raisonSociale: "TechStart SARL",
-      siren: "987654321",
-      siret: "98765432100001",
-      tva: "FR98765432100",
-      type: "prospect",
-      secteur: "tech",
-      taille: "pme",
-      adresse: "45 Rue de l'Innovation",
-      codePostal: "69002",
-      ville: "Lyon",
-      siteWeb: "https://www.techstart.fr",
-      contacts: 1,
-      dateAjout: "2024-01-10",
-      tags: ["Startup"]
-    },
-    {
-      id: 3,
-      raisonSociale: "Design Studio",
-      siren: "456789123",
-      siret: "45678912300001",
-      tva: "FR45678912300",
-      type: "client",
-      secteur: "services",
-      taille: "petite",
-      adresse: "78 Boulevard des Arts",
-      codePostal: "33000",
-      ville: "Bordeaux",
-      siteWeb: "https://www.design-studio.com",
-      contacts: 2,
-      dateAjout: "2024-01-08",
-      tags: ["Design", "Créatif"]
-    },
-    {
-      id: 4,
-      raisonSociale: "Logistique Express",
-      siren: "258369147",
-      siret: "25836914700001",
-      tva: "FR25836914700",
-      type: "fournisseur",
-      secteur: "transport",
-      taille: "moyenne",
-      adresse: "12 Route de la Livraison",
-      codePostal: "44000",
-      ville: "Nantes",
-      siteWeb: "https://www.logistique-express.fr",
-      contacts: 1,
-      dateAjout: "2024-01-12",
-      tags: ["Transport"]
-    }
-  ]
+  const { data: entreprises = [], isLoading, error } = useEntreprises()
 
-  const getTypeBadge = (type: string) => {
+  const getTypeBadge = (type: string | undefined) => {
     switch (type) {
       case "client":
         return <Badge variant="default" className="bg-success text-success-foreground"><Briefcase className="w-3 h-3 mr-1" />Client</Badge>
@@ -130,11 +61,12 @@ export default function Entreprises() {
       case "fournisseur":
         return <Badge variant="default" className="bg-warning text-warning-foreground"><Truck className="w-3 h-3 mr-1" />Fournisseur</Badge>
       default:
-        return <Badge variant="outline">-</Badge>
+        return <Badge variant="outline">Non défini</Badge>
     }
   }
 
-  const getTailleLabel = (taille: string) => {
+  const getTailleLabel = (taille: string | undefined) => {
+    if (!taille) return "Non définie"
     const tailles: Record<string, string> = {
       "grande": "Grande entreprise",
       "moyenne": "ETI",
@@ -144,7 +76,8 @@ export default function Entreprises() {
     return tailles[taille] || taille
   }
 
-  const getSecteurLabel = (secteur: string) => {
+  const getSecteurLabel = (secteur: string | undefined) => {
+    if (!secteur) return "Non défini"
     const secteurs: Record<string, string> = {
       "industrie": "Industrie",
       "tech": "Technologie",
@@ -157,18 +90,39 @@ export default function Entreprises() {
     return secteurs[secteur] || secteur
   }
 
-  const filteredEntreprises = entreprises.filter(entreprise => {
+  const filteredEntreprises = entreprises?.filter(entreprise => {
     const matchesSearch = 
-      entreprise.raisonSociale.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      entreprise.siren.includes(searchQuery) ||
-      entreprise.siret.includes(searchQuery) ||
-      entreprise.ville.toLowerCase().includes(searchQuery.toLowerCase())
+      entreprise.raison_sociale?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      entreprise.siren?.includes(searchQuery) ||
+      entreprise.siret?.includes(searchQuery) ||
+      entreprise.ville?.toLowerCase().includes(searchQuery.toLowerCase())
     
-    const matchesType = filterType === "all" || entreprise.type === filterType
+    const matchesType = filterType === "all" || entreprise.type_relation === filterType
     const matchesSecteur = filterSecteur === "all" || entreprise.secteur === filterSecteur
     
     return matchesSearch && matchesType && matchesSecteur
-  })
+  }) || []
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            Erreur lors du chargement des entreprises: {error.message}
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -204,7 +158,7 @@ export default function Entreprises() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {entreprises.filter(e => e.type === "client").length}
+              {entreprises.filter(e => e.type_relation === "client").length}
             </div>
           </CardContent>
         </Card>
@@ -215,7 +169,7 @@ export default function Entreprises() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {entreprises.filter(e => e.type === "prospect").length}
+              {entreprises.filter(e => e.type_relation === "prospect").length}
             </div>
           </CardContent>
         </Card>
@@ -226,7 +180,7 @@ export default function Entreprises() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {entreprises.filter(e => e.type === "fournisseur").length}
+              {entreprises.filter(e => e.type_relation === "fournisseur").length}
             </div>
           </CardContent>
         </Card>
@@ -281,96 +235,123 @@ export default function Entreprises() {
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Entreprise</TableHead>
-                <TableHead>SIREN/SIRET</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Secteur</TableHead>
-                <TableHead>Localisation</TableHead>
-                <TableHead>Contacts</TableHead>
-                <TableHead>Tags</TableHead>
-                <TableHead className="w-12"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredEntreprises.map((entreprise) => (
-                <TableRow key={entreprise.id}>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{entreprise.raisonSociale}</div>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Globe className="w-3 h-3 mr-1" />
-                        {entreprise.siteWeb.replace(/^https?:\/\//, '')}
-                      </div>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <CircleDollarSign className="w-3 h-3 mr-1" />
-                        TVA: {entreprise.tva}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-mono">
-                    <div className="text-sm">SIREN: {entreprise.siren}</div>
-                    <div className="text-sm">SIRET: {entreprise.siret}</div>
-                  </TableCell>
-                  <TableCell>{getTypeBadge(entreprise.type)}</TableCell>
-                  <TableCell>
-                    <div>
-                      <div>{getSecteurLabel(entreprise.secteur)}</div>
-                      <div className="text-sm text-muted-foreground">{getTailleLabel(entreprise.taille)}</div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <MapPin className="w-3 h-3 mr-1" />
-                      <div>
-                        <div className="text-sm">{entreprise.codePostal} {entreprise.ville}</div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <Users className="w-3 h-3 mr-1" />
-                      <span>{entreprise.contacts}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {entreprise.tags.map((tag, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Eye className="w-4 h-4 mr-2" />
-                          Voir
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Edit className="w-4 h-4 mr-2" />
-                          Modifier
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Supprimer
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          {filteredEntreprises.length === 0 ? (
+            <div className="text-center py-8">
+              <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-muted-foreground mb-2">
+                Aucune entreprise trouvée
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {entreprises.length === 0 
+                  ? "Ajoutez votre première entreprise pour commencer" 
+                  : "Essayez de modifier vos filtres de recherche"
+                }
+              </p>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Entreprise</TableHead>
+                  <TableHead>SIREN/SIRET</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Secteur</TableHead>
+                  <TableHead>Localisation</TableHead>
+                  <TableHead>Date d'ajout</TableHead>
+                  <TableHead className="w-12"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredEntreprises.map((entreprise) => (
+                  <TableRow key={entreprise.id}>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{entreprise.raison_sociale}</div>
+                        {entreprise.site_web && (
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Globe className="w-3 h-3 mr-1" />
+                            {entreprise.site_web.replace(/^https?:\/\//, '')}
+                          </div>
+                        )}
+                        {entreprise.tva && (
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <CircleDollarSign className="w-3 h-3 mr-1" />
+                            TVA: {entreprise.tva}
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-mono">
+                      {entreprise.siren && (
+                        <div className="text-sm">SIREN: {entreprise.siren}</div>
+                      )}
+                      {entreprise.siret && (
+                        <div className="text-sm">SIRET: {entreprise.siret}</div>
+                      )}
+                      {!entreprise.siren && !entreprise.siret && (
+                        <span className="text-muted-foreground text-sm">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>{getTypeBadge(entreprise.type_relation)}</TableCell>
+                    <TableCell>
+                      <div>
+                        <div>{getSecteurLabel(entreprise.secteur)}</div>
+                        <div className="text-sm text-muted-foreground">{getTailleLabel(entreprise.taille)}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {entreprise.ville || entreprise.code_postal ? (
+                        <div className="flex items-center">
+                          <MapPin className="w-3 h-3 mr-1" />
+                          <div>
+                            <div className="text-sm">
+                              {entreprise.code_postal} {entreprise.ville}
+                            </div>
+                            {entreprise.adresse && (
+                              <div className="text-xs text-muted-foreground">
+                                {entreprise.adresse}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {entreprise.created_at 
+                        ? new Date(entreprise.created_at).toLocaleDateString('fr-FR')
+                        : "-"
+                      }
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>
+                            <Eye className="w-4 h-4 mr-2" />
+                            Voir
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Edit className="w-4 h-4 mr-2" />
+                            Modifier
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive">
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Supprimer
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>
