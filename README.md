@@ -32,6 +32,10 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
+# Step 3.1: Configure your environment variables.
+cp .env.example .env
+# Edit `.env` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
