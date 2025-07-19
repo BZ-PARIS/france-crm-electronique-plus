@@ -1,77 +1,231 @@
-# Welcome to your Lovable project
+# France CRM Electronique Plus
 
-## Project info
+> 🚀 **SaaS CRM robuste et multi-tenant** pour la gestion commerciale et administrative
 
-**URL**: https://lovable.dev/projects/5e8e860e-eb30-486e-9e6b-95092f857ba4
+[![CI/CD Pipeline](https://github.com/YOUR_USERNAME/YOUR_REPO/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions)
+[![Coverage](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPO/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/YOUR_REPO)
 
-## How can I edit this code?
+## 📋 Fonctionnalités
 
-There are several ways of editing your application.
+- 🔐 **Authentification Supabase** avec gestion des rôles
+- 👥 **Multi-tenant** avec organisations isolées
+- 💳 **Intégration Stripe** pour les abonnements
+- 📊 **Tableaux de bord** avec métriques temps réel
+- 🏢 **Gestion d'entreprises et contacts**
+- 📄 **Devis, factures et prestations**
+- 📈 **KPI et analytics**
+- 🔧 **Architecture moderne** React + TypeScript + Tailwind
 
-**Use Lovable**
+## 🏗️ Architecture Technique
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5e8e860e-eb30-486e-9e6b-95092f857ba4) and start prompting.
+### Frontend
+- **React 18** avec TypeScript
+- **Vite** pour le build et le dev server
+- **Tailwind CSS** pour le styling
+- **shadcn/ui** pour les composants
+- **React Query** pour la gestion d'état serveur
+- **React Router** pour la navigation
 
-Changes made via Lovable will be committed automatically to this repo.
+### Backend
+- **Supabase** (PostgreSQL + Auth + Realtime + Edge Functions)
+- **Row Level Security (RLS)** pour l'isolation des données
+- **Stripe** pour les paiements et abonnements
 
-**Use your preferred IDE**
+### DevOps
+- **GitHub Actions** pour CI/CD
+- **Jest + React Testing Library** pour les tests
+- **Prettier + ESLint** pour la qualité du code
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🚀 Installation et Configuration
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prérequis
+- Node.js 18+ ([installer avec nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+- Compte [Supabase](https://supabase.com)
+- Compte [Stripe](https://stripe.com) (optionnel pour les paiements)
 
-Follow these steps:
+### 1. Cloner le projet
+```bash
+git clone https://github.com/YOUR_USERNAME/france-crm-electronique-plus.git
+cd france-crm-electronique-plus
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 2. Installer les dépendances
+```bash
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### 3. Configuration Supabase
 
-# Step 3: Install the necessary dependencies.
-npm i
+#### a) Créer un projet Supabase
+1. Créez un projet sur [Supabase](https://supabase.com/dashboard)
+2. Récupérez l'URL et la clé anonyme dans Settings > API
 
-# Step 3.1: Configure your environment variables.
+#### b) Configurer les variables d'environnement
+```bash
 cp .env.example .env
-# Edit `.env` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Éditez `.env` avec vos valeurs :
+```env
+VITE_SUPABASE_URL=https://votre-projet.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+#### c) Exécuter les migrations de base de données
+```bash
+# Installer Supabase CLI
+npm install -g @supabase/cli
+
+# Se connecter à votre projet
+supabase login
+supabase link --project-ref votre-project-ref
+
+# Appliquer les migrations
+supabase db push
+```
+
+### 4. Configuration Stripe (optionnel)
+
+1. Créez un compte [Stripe](https://dashboard.stripe.com)
+2. Récupérez vos clés API dans Developers > API keys
+3. Configurez les secrets dans Supabase Edge Functions :
+
+```bash
+supabase secrets set STRIPE_SECRET_KEY=sk_test_...
+```
+
+### 5. Démarrer l'application
+
+#### Développement
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+#### Production
+```bash
+npm run build
+npm run preview
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🧪 Tests et Qualité
 
-**Use GitHub Codespaces**
+### Lancer les tests
+```bash
+npm test                # Tests unitaires
+npm run test:watch      # Tests en mode watch
+npm run test:coverage   # Tests avec couverture
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Vérifications qualité
+```bash
+npm run lint            # ESLint
+npm run format          # Prettier (formatage)
+npm run format:check    # Vérifier le formatage
+```
 
-## What technologies are used for this project?
+## 📦 Déploiement
 
-This project is built with:
+### 1. Via Lovable (Recommandé)
+1. Connectez le projet à GitHub
+2. Cliquez sur "Publish" dans l'interface Lovable
+3. Configurez votre domaine personnalisé si nécessaire
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### 2. Via Vercel
+```bash
+# Installer Vercel CLI
+npm install -g vercel
 
-## How can I deploy this project?
+# Déployer
+vercel --prod
+```
 
-Simply open [Lovable](https://lovable.dev/projects/5e8e860e-eb30-486e-9e6b-95092f857ba4) and click on Share -> Publish.
+### 3. Via Netlify
+```bash
+# Build
+npm run build
 
-## Can I connect a custom domain to my Lovable project?
+# Déployer le dossier dist/
+```
 
-Yes, you can!
+### Variables d'environnement de production
+Configurez ces variables dans votre plateforme de déploiement :
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```env
+VITE_SUPABASE_URL=https://votre-projet-prod.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 🗄️ Structure de la Base de Données
+
+### Tables principales
+- `profiles` - Profils utilisateurs avec rôles
+- `organizations` - Organisations multi-tenant
+- `contacts` - Contacts clients/prospects
+- `entreprises` - Données d'entreprises
+- `devis` - Devis commerciaux
+- `factures` - Factures
+- `prestations` - Prestations de service
+- `subscriptions` - Abonnements Stripe
+
+### Politiques RLS
+Toutes les tables implémentent Row Level Security pour isoler les données par organisation.
+
+## 💳 Gestion des Abonnements
+
+### Plans disponibles
+- **Gratuit** : 5 contacts, fonctionnalités de base
+- **Pro** : 100 contacts, devis/factures, support
+- **Enterprise** : Illimité, API, support prioritaire
+
+### Intégration Stripe
+```typescript
+// Créer une session de paiement
+const { data } = await supabase.functions.invoke('create-stripe-session', {
+  body: { plan: 'pro' }
+});
+
+// Rediriger vers Stripe Checkout
+window.location.href = data.url;
+```
+
+## 🛠️ Développement
+
+### Architecture des composants
+```
+src/
+├── components/          # Composants réutilisables
+│   ├── ui/             # Composants shadcn/ui
+│   └── layout/         # Layout et navigation
+├── pages/              # Pages de l'application
+├── hooks/              # Custom hooks
+├── contexts/           # Contextes React
+├── lib/                # Utilitaires
+└── integrations/       # Intégrations externes
+```
+
+### Conventions de code
+- **Composants** : PascalCase
+- **Hooks** : préfixe `use`
+- **Types** : suffixe `Type` ou `Interface`
+- **Tests** : fichiers `.test.tsx`
+
+### Contribution
+1. Forkez le projet
+2. Créez une branche feature (`git checkout -b feature/nouvelle-fonctionnalite`)
+3. Committez vos changements (`git commit -m 'Ajout nouvelle fonctionnalité'`)
+4. Pushez sur la branche (`git push origin feature/nouvelle-fonctionnalite`)
+5. Ouvrez une Pull Request
+
+## 📞 Support
+
+- 📧 **Email** : support@france-crm.fr
+- 📖 **Documentation** : [docs.france-crm.fr](https://docs.france-crm.fr)
+- 🐛 **Issues** : [GitHub Issues](https://github.com/YOUR_USERNAME/YOUR_REPO/issues)
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+---
+
+**Développé avec ❤️ par l'équipe France CRM Electronique Plus**
