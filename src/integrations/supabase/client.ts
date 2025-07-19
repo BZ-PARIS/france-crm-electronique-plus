@@ -2,8 +2,8 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = "https://uciwundapajvstblkdbz.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjaXd1bmRhcGFqdnN0YmxrZGJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODYyOTgsImV4cCI6MjA2ODM2MjI5OH0.OkaGJD_3XYmcVP5VQSgLlAxut9plnURgKDEo2O2aJ78";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
@@ -28,7 +28,7 @@ const safeStorage = (() => {
   }
 })();
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     storage: safeStorage,
     persistSession: true,
