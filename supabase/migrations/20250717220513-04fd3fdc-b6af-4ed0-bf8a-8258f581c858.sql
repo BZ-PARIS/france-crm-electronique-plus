@@ -225,7 +225,7 @@ CREATE TABLE public.kpi (
   reference TEXT UNIQUE NOT NULL,
   designation TEXT NOT NULL,
   valeur DECIMAL(15,2),
-  analyse TEXT,
+  analyse_kpi TEXT,
   date_revision DATE,
   date_expiration DATE,
   canaux TEXT[],
