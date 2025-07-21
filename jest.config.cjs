@@ -1,9 +1,14 @@
 /** @type {import('jest').Config} */
 module.exports = {
   preset: 'ts-jest',
+  globals: {
+    'ts-jest': {
+      tsconfig: './tsconfig.app.json',
+    },
+  },
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transform: {
@@ -15,8 +20,8 @@ module.exports = {
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.(ts|tsx|js)',
-    '<rootDir>/src/**/*.(test|spec).(ts|tsx|js)',
+    '<rootDir>/src/**/__tests__/**/*.{ts,tsx,js}',
+    '<rootDir>/src/**/*.{test,spec}.{ts,tsx,js}',
   ],
   collectCoverageFrom: [
     'src/**/*.(ts|tsx)',
