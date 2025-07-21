@@ -6,11 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { OrganizationGuard } from "@/components/OrganizationGuard";
+import { OnboardingCheck } from "@/components/OnboardingCheck";
 import Pricing from "./pages/Pricing";
 import Dashboard from "./pages/Dashboard";
 import Contacts from "./pages/Contacts";
 import Entreprises from "./pages/Entreprises";
 import Auth from "./pages/Auth";
+import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,28 +25,36 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
+          <OnboardingCheck>
+            <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/" element={
               <ProtectedRoute>
-                <Layout>
-                  <Dashboard />
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/contacts" element={
               <ProtectedRoute>
-                <Layout>
-                  <Contacts />
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Contacts />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/entreprises" element={
               <ProtectedRoute>
-                <Layout>
-                  <Entreprises />
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Entreprises />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/collaborateurs" element={
@@ -118,7 +129,8 @@ const App = () => (
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
-          </Routes>
+            </Routes>
+          </OnboardingCheck>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

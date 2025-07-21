@@ -1,6 +1,7 @@
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
-import { Bell, Search, User, LogOut } from "lucide-react"
+import { NotificationCenter } from "@/components/NotificationCenter"
+import { Search, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -69,9 +70,7 @@ export function Layout({ children }: LayoutProps) {
               </div>
               
               <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon">
-                  <Bell className="h-4 w-4" />
-                </Button>
+                <NotificationCenter />
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

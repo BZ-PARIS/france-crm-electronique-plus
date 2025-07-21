@@ -19,6 +19,7 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
+  organizationId: string | null;
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
   signUp: (email: string, password: string, nom: string, prenom: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
@@ -40,6 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [organizationId, setOrganizationId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -57,6 +59,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       setProfile(data);
+      
+      // Récupérer l'organisation de l'utilisateur
+      const { data: orgMember } = await supabase
+        .from('organization_members')
+        .select('organization_id')
+        .eq('user_id', userId)
+        .single();
+      
+      if (orgMember) {
+        setOrganizationId(orgMember.organization_id);
+      }
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
@@ -82,10 +95,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }, 0);
         } else {
           setProfile(null);
+          setOrganizationId(null);
         }
         
         if (event === 'SIGNED_OUT') {
           setProfile(null);
+          setOrganizationId(null);
         }
         
         setLoading(false);
@@ -206,6 +221,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     session,
     profile,
     loading,
+    organizationId,
     signIn,
     signUp,
     signOut,

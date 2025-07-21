@@ -1,6 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { useOrganization } from "@/hooks/useOrganization"
+import { useNavigate } from "react-router-dom"
 import { 
   Users, 
   Building2, 
@@ -10,10 +13,14 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  Euro
+  Euro,
+  Crown,
+  Zap
 } from "lucide-react"
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const { organization, memberInfo } = useOrganization();
   const stats = [
     {
       title: "Contacts actifs",
@@ -120,11 +127,26 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Tableau de bord</h1>
-        <p className="text-muted-foreground">
-          Vue d'ensemble de votre activité commerciale
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Tableau de bord</h1>
+          <p className="text-muted-foreground">
+            Vue d'ensemble de votre activité commerciale
+            {organization && ` - ${organization.name}`}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          {memberInfo?.role && (
+            <Badge variant="outline" className="gap-1">
+              <Crown className="h-3 w-3" />
+              {memberInfo.role}
+            </Badge>
+          )}
+          <Button onClick={() => navigate('/pricing')} variant="outline" size="sm">
+            <Zap className="h-4 w-4 mr-2" />
+            Voir les offres
+          </Button>
+        </div>
       </div>
 
       {/* Stats Cards */}

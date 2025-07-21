@@ -278,11 +278,10 @@ export default function Contacts() {
                     </TableCell>
                     <TableCell>{getTypeBadge(contact.type)}</TableCell>
                     <TableCell>
-                      {/* @ts-expect-error Contacts->entreprises relation not typed */}
-                      {contact.entreprises?.raison_sociale ? (
+                      {/* Relations Supabase typées dynamiquement */}
+                      {(contact as any).entreprises?.raison_sociale ? (
                         <div className="font-medium">
-                          {/* @ts-expect-error Accessing nested relation */}
-                          {contact.entreprises.raison_sociale}
+                          {(contact as any).entreprises.raison_sociale}
                         </div>
                       ) : (
                         <span className="text-muted-foreground">-</span>
