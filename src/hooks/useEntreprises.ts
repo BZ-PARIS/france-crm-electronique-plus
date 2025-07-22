@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 export interface Entreprise {
   id: string;
@@ -62,12 +63,19 @@ export const useEntreprises = () => {
 export const useCreateEntreprise = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { organizationId } = useAuth();
 
   return useMutation({
     mutationFn: async (data: CreateEntrepriseData) => {
+      if (!organizationId) {
+        throw new Error('Organisation introuvable');
+      }
+
+      const payload = { ...data, organization_id: organizationId };
+
       const { data: entreprise, error } = await supabase
         .from('entreprises')
-        .insert([data])
+        .insert([payload])
         .select()
         .single();
 
