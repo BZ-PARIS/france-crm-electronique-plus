@@ -23,19 +23,19 @@ interface OnboardingStep {
 
 export default function Onboarding() {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, refreshProfile } = useAuth();
   const { organization, refetch } = useOrganization();
   const { toast } = useToast();
-  
+
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  
+
   // Données du formulaire
   const [organizationData, setOrganizationData] = useState({
     name: organization?.name || '',
     description: organization?.description || '',
   });
-  
+
   const [profileData, setProfileData] = useState({
     fonction: profile?.fonction || '',
     telephone: profile?.telephone || '',
@@ -74,7 +74,7 @@ export default function Onboarding() {
 
   const updateOrganization = async () => {
     if (!organization?.id) return;
-    
+
     try {
       setLoading(true);
       const { error } = await supabase
@@ -86,17 +86,17 @@ export default function Onboarding() {
         .eq('id', organization.id);
 
       if (error) throw error;
-      
+
       await refetch();
       toast({
-        title: "Organisation mise à jour",
-        description: "Les informations de votre organisation ont été sauvegardées.",
+        title: 'Organisation mise à jour',
+        description: 'Les informations de votre organisation ont été sauvegardées.',
       });
     } catch (error) {
       toast({
-        title: "Erreur",
+        title: 'Erreur',
         description: "Impossible de mettre à jour l'organisation.",
-        variant: "destructive",
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -105,7 +105,7 @@ export default function Onboarding() {
 
   const updateProfile = async () => {
     if (!user?.id) return;
-    
+
     try {
       setLoading(true);
       const { error } = await supabase
@@ -117,16 +117,16 @@ export default function Onboarding() {
         .eq('id', user.id);
 
       if (error) throw error;
-      
+
       toast({
-        title: "Profil mis à jour",
-        description: "Vos informations ont été sauvegardées.",
+        title: 'Profil mis à jour',
+        description: 'Vos informations ont été sauvegardées.',
       });
     } catch (error) {
       toast({
-        title: "Erreur",
-        description: "Impossible de mettre à jour le profil.",
-        variant: "destructive",
+        title: 'Erreur',
+        description: 'Impossible de mettre à jour le profil.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -139,18 +139,30 @@ export default function Onboarding() {
     } else if (currentStep === 2) {
       await updateProfile();
     }
-    
+
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Marquer l'onboarding comme terminé
-      localStorage.setItem('onboarding_completed', 'true');
+      // Marquer l'onboarding comme terminé dans la base de données
+      if (user?.id) {
+        await supabase
+          .from('profiles')
+          .update({ onboarding_completed: true })
+          .eq('id', user.id);
+        await refreshProfile();
+      }
       navigate('/');
     }
   };
 
-  const skipOnboarding = () => {
-    localStorage.setItem('onboarding_completed', 'true');
+  const skipOnboarding = async () => {
+    if (user?.id) {
+      await supabase
+        .from('profiles')
+        .update({ onboarding_completed: true })
+        .eq('id', user.id);
+      await refreshProfile();
+    }
     navigate('/');
   };
 
@@ -158,24 +170,24 @@ export default function Onboarding() {
     switch (currentStep) {
       case 0:
         return (
-          <div className="text-center space-y-6">
-            <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+          <div className="space-y-6 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
               <Building2 className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold mb-2">Bienvenue dans votre CRM !</h2>
+              <h2 className="mb-2 text-2xl font-bold">Bienvenue dans votre CRM !</h2>
               <p className="text-muted-foreground">
-                Nous allons configurer votre espace de travail en quelques étapes simples.
-                Cela ne prendra que quelques minutes.
+                Nous allons configurer votre espace de travail en quelques étapes simples. Cela ne
+                prendra que quelques minutes.
               </p>
             </div>
             <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
               <Badge variant="secondary">
-                <CheckCircle className="h-3 w-3 mr-1" />
+                <CheckCircle className="mr-1 h-3 w-3" />
                 Organisation créée
               </Badge>
               <Badge variant="secondary">
-                <CheckCircle className="h-3 w-3 mr-1" />
+                <CheckCircle className="mr-1 h-3 w-3" />
                 Compte activé
               </Badge>
             </div>
@@ -186,7 +198,7 @@ export default function Onboarding() {
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-2xl font-bold mb-2">Configurez votre organisation</h2>
+              <h2 className="mb-2 text-2xl font-bold">Configurez votre organisation</h2>
               <p className="text-muted-foreground">
                 Personnalisez les informations de votre organisation
               </p>
@@ -197,7 +209,9 @@ export default function Onboarding() {
                 <Input
                   id="orgName"
                   value={organizationData.name}
-                  onChange={(e) => setOrganizationData({ ...organizationData, name: e.target.value })}
+                  onChange={(e) =>
+                    setOrganizationData({ ...organizationData, name: e.target.value })
+                  }
                   placeholder="Ex: Mon Entreprise SAS"
                 />
               </div>
@@ -206,7 +220,9 @@ export default function Onboarding() {
                 <Textarea
                   id="orgDescription"
                   value={organizationData.description}
-                  onChange={(e) => setOrganizationData({ ...organizationData, description: e.target.value })}
+                  onChange={(e) =>
+                    setOrganizationData({ ...organizationData, description: e.target.value })
+                  }
                   placeholder="Décrivez brièvement votre activité..."
                   rows={3}
                 />
@@ -219,10 +235,8 @@ export default function Onboarding() {
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-2xl font-bold mb-2">Votre profil</h2>
-              <p className="text-muted-foreground">
-                Complétez vos informations personnelles
-              </p>
+              <h2 className="mb-2 text-2xl font-bold">Votre profil</h2>
+              <p className="text-muted-foreground">Complétez vos informations personnelles</p>
             </div>
             <div className="space-y-4">
               <div>
@@ -249,30 +263,30 @@ export default function Onboarding() {
 
       case 3:
         return (
-          <div className="text-center space-y-6">
-            <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+          <div className="space-y-6 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold mb-2">Configuration terminée !</h2>
+              <h2 className="mb-2 text-2xl font-bold">Configuration terminée !</h2>
               <p className="text-muted-foreground">
-                Votre CRM est maintenant configuré et prêt à être utilisé.
-                Vous pouvez commencer à gérer vos contacts, entreprises et plus encore.
+                Votre CRM est maintenant configuré et prêt à être utilisé. Vous pouvez commencer à
+                gérer vos contacts, entreprises et plus encore.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="p-4 border rounded-lg">
-                <Users className="h-6 w-6 text-primary mx-auto mb-2" />
+            <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-3">
+              <div className="rounded-lg border p-4">
+                <Users className="mx-auto mb-2 h-6 w-6 text-primary" />
                 <div className="font-medium">Contacts</div>
                 <div className="text-muted-foreground">Gérez vos relations clients</div>
               </div>
-              <div className="p-4 border rounded-lg">
-                <Building2 className="h-6 w-6 text-primary mx-auto mb-2" />
+              <div className="rounded-lg border p-4">
+                <Building2 className="mx-auto mb-2 h-6 w-6 text-primary" />
                 <div className="font-medium">Entreprises</div>
                 <div className="text-muted-foreground">Suivez vos comptes</div>
               </div>
-              <div className="p-4 border rounded-lg">
-                <Settings className="h-6 w-6 text-primary mx-auto mb-2" />
+              <div className="rounded-lg border p-4">
+                <Settings className="mx-auto mb-2 h-6 w-6 text-primary" />
                 <div className="font-medium">Tableau de bord</div>
                 <div className="text-muted-foreground">Visualisez vos KPIs</div>
               </div>
@@ -286,7 +300,7 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -303,26 +317,22 @@ export default function Onboarding() {
               Passer
             </Button>
           </div>
-          <Progress value={(currentStep + 1) / steps.length * 100} className="w-full" />
+          <Progress value={((currentStep + 1) / steps.length) * 100} className="w-full" />
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
           {renderStepContent()}
-          
+
           <div className="flex justify-between pt-6">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
               disabled={currentStep === 0}
             >
               Précédent
             </Button>
-            
-            <Button 
-              onClick={handleNext}
-              disabled={loading}
-              className="flex items-center gap-2"
-            >
+
+            <Button onClick={handleNext} disabled={loading} className="flex items-center gap-2">
               {currentStep === steps.length - 1 ? (
                 <>
                   Commencer

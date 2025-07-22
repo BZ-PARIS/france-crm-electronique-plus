@@ -12,6 +12,7 @@ interface Profile {
   fonction?: string;
   telephone?: string;
   statut?: string;
+  onboarding_completed?: boolean;
 }
 
 interface AuthContextType {
@@ -21,7 +22,12 @@ interface AuthContextType {
   loading: boolean;
   organizationId: string | null;
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
-  signUp: (email: string, password: string, nom: string, prenom: string) => Promise<{ error?: string }>;
+  signUp: (
+    email: string,
+    password: string,
+    nom: string,
+    prenom: string
+  ) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error?: string }>;
   refreshProfile: () => Promise<void>;
@@ -47,26 +53,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+
       if (error) {
         console.error('Error fetching profile:', error);
         return;
       }
-      
+
       setProfile(data);
-      
+
       // Récupérer l'organisation de l'utilisateur
       const { data: orgMember } = await supabase
         .from('organization_members')
         .select('organization_id')
         .eq('user_id', userId)
         .single();
-      
+
       if (orgMember) {
         setOrganizationId(orgMember.organization_id);
       }
@@ -83,39 +85,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          // Fetch profile after auth state change
-          setTimeout(() => {
-            fetchProfile(session.user.id);
-          }, 0);
-        } else {
-          setProfile(null);
-          setOrganizationId(null);
-        }
-        
-        if (event === 'SIGNED_OUT') {
-          setProfile(null);
-          setOrganizationId(null);
-        }
-        
-        setLoading(false);
-      }
-    );
-
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
-        fetchProfile(session.user.id);
+        // Fetch profile after auth state change
+        await fetchProfile(session.user.id);
+      } else {
+        setProfile(null);
+        setOrganizationId(null);
       }
-      
+
+      if (event === 'SIGNED_OUT') {
+        setProfile(null);
+        setOrganizationId(null);
+      }
+
+      setLoading(false);
+    });
+
+    // Check for existing session
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (session?.user) {
+        await fetchProfile(session.user.id);
+      }
+
       setLoading(false);
     });
 
@@ -134,8 +134,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       toast({
-        title: "Connexion réussie",
-        description: "Vous êtes maintenant connecté.",
+        title: 'Connexion réussie',
+        description: 'Vous êtes maintenant connecté.',
       });
 
       return {};
@@ -147,7 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUp = async (email: string, password: string, nom: string, prenom: string) => {
     try {
       const redirectUrl = `${window.location.origin}/`;
-      
+
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -155,9 +155,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           emailRedirectTo: redirectUrl,
           data: {
             nom,
-            prenom
-          }
-        }
+            prenom,
+          },
+        },
       });
 
       if (error) {
@@ -165,8 +165,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       toast({
-        title: "Inscription réussie",
-        description: "Vérifiez votre email pour confirmer votre compte.",
+        title: 'Inscription réussie',
+        description: 'Vérifiez votre email pour confirmer votre compte.',
       });
 
       return {};
@@ -180,14 +180,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { error } = await supabase.auth.signOut();
       if (error) {
         toast({
-          title: "Erreur",
+          title: 'Erreur',
           description: error.message,
-          variant: "destructive",
+          variant: 'destructive',
         });
       } else {
         toast({
-          title: "Déconnexion réussie",
-          description: "Vous êtes maintenant déconnecté.",
+          title: 'Déconnexion réussie',
+          description: 'Vous êtes maintenant déconnecté.',
         });
       }
     } catch (error) {
@@ -206,8 +206,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       toast({
-        title: "Email envoyé",
-        description: "Vérifiez votre email pour réinitialiser votre mot de passe.",
+        title: 'Email envoyé',
+        description: 'Vérifiez votre email pour réinitialiser votre mot de passe.',
       });
 
       return {};
