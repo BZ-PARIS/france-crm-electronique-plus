@@ -66,6 +66,8 @@ export default function Entreprises() {
         return <Badge variant="default" className="bg-info text-info-foreground"><Handshake className="w-3 h-3 mr-1" />Prospect</Badge>
       case "fournisseur":
         return <Badge variant="default" className="bg-warning text-warning-foreground"><Truck className="w-3 h-3 mr-1" />Fournisseur</Badge>
+      case "partenaire":
+        return <Badge variant="default" className="bg-muted text-muted-foreground"><Users className="w-3 h-3 mr-1" />Partenaire</Badge>
       default:
         return <Badge variant="outline">Non défini</Badge>
     }
@@ -218,6 +220,7 @@ export default function Entreprises() {
                   <SelectItem value="client">Client</SelectItem>
                   <SelectItem value="prospect">Prospect</SelectItem>
                   <SelectItem value="fournisseur">Fournisseur</SelectItem>
+                  <SelectItem value="partenaire">Partenaire</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={filterSecteur} onValueChange={setFilterSecteur}>
