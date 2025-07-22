@@ -44,12 +44,17 @@ import {
 } from "lucide-react"
 import { useEntreprises } from "@/hooks/useEntreprises"
 import { EntrepriseForm } from "@/components/forms/EntrepriseForm"
+import { EntrepriseEditForm } from "@/components/forms/EntrepriseEditForm"
+import { EntrepriseDetailsDialog } from "@/components/details/EntrepriseDetailsDialog"
+import type { Entreprise } from "@/hooks/useEntreprises"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function Entreprises() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterType, setFilterType] = useState("all")
   const [filterSecteur, setFilterSecteur] = useState("all")
+  const [viewEntreprise, setViewEntreprise] = useState<Entreprise | null>(null)
+  const [editEntreprise, setEditEntreprise] = useState<Entreprise | null>(null)
 
   const { data: entreprises = [], isLoading, error } = useEntreprises()
 
@@ -330,11 +335,11 @@ export default function Entreprises() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => setViewEntreprise(entreprise)}>
                             <Eye className="w-4 h-4 mr-2" />
                             Voir
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => setEditEntreprise(entreprise)}>
                             <Edit className="w-4 h-4 mr-2" />
                             Modifier
                           </DropdownMenuItem>
@@ -352,6 +357,16 @@ export default function Entreprises() {
           )}
         </CardContent>
       </Card>
+      <EntrepriseDetailsDialog
+        entreprise={viewEntreprise}
+        open={viewEntreprise !== null}
+        onOpenChange={() => setViewEntreprise(null)}
+      />
+      <EntrepriseEditForm
+        entreprise={editEntreprise}
+        open={editEntreprise !== null}
+        onOpenChange={() => setEditEntreprise(null)}
+      />
     </div>
   )
 }
