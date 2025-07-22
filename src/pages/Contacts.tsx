@@ -42,12 +42,17 @@ import {
 } from "lucide-react"
 import { useContacts } from "@/hooks/useContacts"
 import { ContactForm } from "@/components/forms/ContactForm"
+import { ContactEditForm } from "@/components/forms/ContactEditForm"
+import { ContactDetailsDialog } from "@/components/details/ContactDetailsDialog"
+import type { Contact } from "@/hooks/useContacts"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function Contacts() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterType, setFilterType] = useState("all")
   const [filterStatus, setFilterStatus] = useState("all")
+  const [viewContact, setViewContact] = useState<Contact | null>(null)
+  const [editContact, setEditContact] = useState<Contact | null>(null)
 
   const { data: contacts = [], isLoading, error } = useContacts()
 
@@ -312,11 +317,11 @@ export default function Contacts() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => setViewContact(contact)}>
                             <Eye className="w-4 h-4 mr-2" />
                             Voir
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => setEditContact(contact)}>
                             <Edit className="w-4 h-4 mr-2" />
                             Modifier
                           </DropdownMenuItem>
@@ -334,6 +339,16 @@ export default function Contacts() {
           )}
         </CardContent>
       </Card>
+      <ContactDetailsDialog
+        contact={viewContact}
+        open={viewContact !== null}
+        onOpenChange={() => setViewContact(null)}
+      />
+      <ContactEditForm
+        contact={editContact}
+        open={editContact !== null}
+        onOpenChange={() => setEditContact(null)}
+      />
     </div>
   )
 }
