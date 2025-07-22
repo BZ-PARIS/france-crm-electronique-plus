@@ -41,6 +41,7 @@ import {
   AlertTriangle
 } from "lucide-react"
 import { useContacts } from "@/hooks/useContacts"
+import { ContactForm } from "@/components/forms/ContactForm"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function Contacts() {
@@ -130,10 +131,7 @@ export default function Contacts() {
             Gérez vos contacts clients, prospects et partenaires
           </p>
         </div>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          Nouveau contact
-        </Button>
+        <ContactForm />
       </div>
 
       {/* Stats Cards */}

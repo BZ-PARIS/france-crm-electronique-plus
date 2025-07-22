@@ -43,6 +43,7 @@ import {
   AlertTriangle
 } from "lucide-react"
 import { useEntreprises } from "@/hooks/useEntreprises"
+import { EntrepriseForm } from "@/components/forms/EntrepriseForm"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function Entreprises() {
@@ -134,10 +135,7 @@ export default function Entreprises() {
             Gérez vos clients, prospects et fournisseurs
           </p>
         </div>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          Nouvelle entreprise
-        </Button>
+        <EntrepriseForm />
       </div>
 
       {/* Stats Cards */}

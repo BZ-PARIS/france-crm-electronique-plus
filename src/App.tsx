@@ -12,6 +12,10 @@ import Pricing from "./pages/Pricing";
 import Dashboard from "./pages/Dashboard";
 import Contacts from "./pages/Contacts";
 import Entreprises from "./pages/Entreprises";
+import Catalogue from "./pages/Catalogue";
+import Devis from "./pages/Devis";
+import Prestations from "./pages/Prestations";
+import Factures from "./pages/Factures";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
@@ -66,30 +70,38 @@ const App = () => (
             } />
             <Route path="/catalogue" element={
               <ProtectedRoute>
-                <Layout>
-                  <div className="p-8"><h1 className="text-2xl font-bold">Catalogue</h1><p className="text-muted-foreground">Module en cours de développement</p></div>
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Catalogue />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/devis" element={
               <ProtectedRoute>
-                <Layout>
-                  <div className="p-8"><h1 className="text-2xl font-bold">Devis</h1><p className="text-muted-foreground">Module en cours de développement</p></div>
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Devis />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/prestations" element={
               <ProtectedRoute>
-                <Layout>
-                  <div className="p-8"><h1 className="text-2xl font-bold">Prestations</h1><p className="text-muted-foreground">Module en cours de développement</p></div>
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Prestations />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/factures" element={
               <ProtectedRoute>
-                <Layout>
-                  <div className="p-8"><h1 className="text-2xl font-bold">Factures</h1><p className="text-muted-foreground">Module en cours de développement</p></div>
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Factures />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/paiements" element={
