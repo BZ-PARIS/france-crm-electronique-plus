@@ -1055,6 +1055,10 @@ export type Database = {
         Args: { user_id: string }
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      is_organization_admin: {
+        Args: { check_organization_id: string; check_user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       contact_type: "particulier" | "entreprise"
