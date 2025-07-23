@@ -16,6 +16,8 @@ import Catalogue from "./pages/Catalogue";
 import Devis from "./pages/Devis";
 import Prestations from "./pages/Prestations";
 import Factures from "./pages/Factures";
+import Paiements from "./pages/Paiements";
+import Reclamations from "./pages/Reclamations";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
@@ -106,23 +108,20 @@ const App = () => (
             } />
             <Route path="/paiements" element={
               <ProtectedRoute>
-                <Layout>
-                  <div className="p-8"><h1 className="text-2xl font-bold">Paiements</h1><p className="text-muted-foreground">Module en cours de développement</p></div>
-                </Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/taches" element={
-              <ProtectedRoute>
-                <Layout>
-                  <div className="p-8"><h1 className="text-2xl font-bold">Tâches</h1><p className="text-muted-foreground">Module en cours de développement</p></div>
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Paiements />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/reclamations" element={
               <ProtectedRoute>
-                <Layout>
-                  <div className="p-8"><h1 className="text-2xl font-bold">Réclamations</h1><p className="text-muted-foreground">Module en cours de développement</p></div>
-                </Layout>
+                <OrganizationGuard>
+                  <Layout>
+                    <Reclamations />
+                  </Layout>
+                </OrganizationGuard>
               </ProtectedRoute>
             } />
             <Route path="/kpi" element={

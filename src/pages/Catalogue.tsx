@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Plus, Search, Package, Euro, MoreHorizontal, Eye, Edit, Trash2, Loader2, AlertTriangle } from "lucide-react";
 import { useCatalogue } from "@/hooks/useCatalogue";
+import { CatalogueForm } from "@/components/forms/CatalogueForm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Catalogue() {
@@ -81,10 +82,7 @@ export default function Catalogue() {
             Gérez vos produits et services
           </p>
         </div>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          Nouveau produit
-        </Button>
+        <CatalogueForm />
       </div>
 
       {/* Stats Cards */}

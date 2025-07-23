@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Plus, Search, FileText, Euro, Calendar, MoreHorizontal, Eye, Edit, Trash2, Loader2, AlertTriangle, Send, Download } from "lucide-react";
 import { useDevis } from "@/hooks/useDevis";
+import { DevisForm } from "@/components/forms/DevisForm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Devis() {
@@ -109,10 +110,7 @@ export default function Devis() {
             Gérez vos devis et propositions commerciales
           </p>
         </div>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          Nouveau devis
-        </Button>
+        <DevisForm />
       </div>
 
       {/* Stats Cards */}
