@@ -23,7 +23,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@sentry/react": ["./src/lib/sentry.ts"]
     }
   },
   "include": ["src"]

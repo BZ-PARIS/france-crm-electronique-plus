@@ -67,7 +67,7 @@ export function useCreateCatalogueItem() {
         description: "Le produit a été ajouté au catalogue avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de l'ajout du produit.",
@@ -100,7 +100,7 @@ export function useUpdateCatalogueItem() {
         description: "Le produit a été modifié avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la modification.",
@@ -130,7 +130,7 @@ export function useDeleteCatalogueItem() {
         description: "Le produit a été supprimé du catalogue.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la suppression.",

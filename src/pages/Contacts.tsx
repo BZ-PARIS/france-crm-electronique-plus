@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import type { ContactWithEntreprise } from "@/types/domain"
 import { 
   Table,
   TableBody,
@@ -282,9 +283,9 @@ export default function Contacts() {
                     <TableCell>{getTypeBadge(contact.type)}</TableCell>
                     <TableCell>
                       {/* Relations Supabase typées dynamiquement */}
-                      {(contact as any).entreprises?.raison_sociale ? (
+                      {(contact as ContactWithEntreprise).entreprises?.raison_sociale ? (
                         <div className="font-medium">
-                          {(contact as any).entreprises.raison_sociale}
+                          {(contact as ContactWithEntreprise).entreprises!.raison_sociale}
                         </div>
                       ) : (
                         <span className="text-muted-foreground">-</span>
