@@ -11,6 +11,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+
+interface Notification {
+  id: string;
+  message: string;
+  read: boolean;
+  action_url?: string;
+}
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Bell, 
@@ -49,7 +56,7 @@ export const NotificationCenter: React.FC = () => {
     }
   };
 
-  const handleNotificationClick = (notification: any) => {
+  const handleNotificationClick = (notification: Notification) => {
     if (!notification.read) {
       markAsRead(notification.id);
     }

@@ -2,13 +2,9 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
-interface Organization {
-  id: string;
-  name: string;
-  slug: string;
-  description?: string;
-  settings?: any;
-}
+import type { Organization } from '@/types/domain';
+
+type MemberRow = OrganizationMember & { organizations: Organization };
 
 interface OrganizationMember {
   id: string;
@@ -68,9 +64,9 @@ export const useOrganization = (): UseOrganizationReturn => {
           throw memberError;
         }
       } else {
-        setMemberInfo(memberData);
-        // Relations Supabase typées dynamiquement
-        setOrganization((memberData as any).organizations);
+        const row = memberData as MemberRow;
+        setMemberInfo(row);
+        setOrganization(row.organizations);
       }
     } catch (err) {
       console.error('Error fetching organization:', err);

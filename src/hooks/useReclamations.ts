@@ -71,7 +71,7 @@ export function useCreateReclamation() {
         description: "La réclamation a été créée avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la création de la réclamation.",
@@ -104,7 +104,7 @@ export function useUpdateReclamation() {
         description: "La réclamation a été modifiée avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la modification.",

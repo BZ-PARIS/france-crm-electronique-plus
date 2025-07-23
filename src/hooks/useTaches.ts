@@ -67,7 +67,7 @@ export function useCreateTache() {
         description: "La tâche a été créée avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la création de la tâche.",
@@ -100,7 +100,7 @@ export function useUpdateTache() {
         description: "La tâche a été modifiée avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la modification.",

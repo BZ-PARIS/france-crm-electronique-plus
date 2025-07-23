@@ -75,7 +75,7 @@ export function useCreatePaiement() {
         description: "Le paiement a été créé avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la création du paiement.",
@@ -108,7 +108,7 @@ export function useUpdatePaiement() {
         description: "Le paiement a été modifié avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la modification.",

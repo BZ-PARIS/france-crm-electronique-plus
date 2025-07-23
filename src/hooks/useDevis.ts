@@ -76,7 +76,7 @@ export function useCreateDevis() {
         description: "Le devis a été créé avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la création du devis.",
@@ -109,7 +109,7 @@ export function useUpdateDevis() {
         description: "Le devis a été modifié avec succès.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue lors de la modification.",
