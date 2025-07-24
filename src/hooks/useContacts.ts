@@ -2,36 +2,21 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import type { Contact } from '@/types/domain';
 
-export interface Contact {
-  id: string;
-  nom: string;
-  prenom?: string;
-  email?: string;
-  telephone?: string;
-  type: 'particulier' | 'entreprise';
-  entreprise_id?: string;
-  collaborateur_id?: string;
-  statut?: string;
-  canal_acquisition?: string;
-  date_acquisition?: string;
-  tags?: string[];
-  commentaires?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+export { Contact };
 
 export interface CreateContactData {
   nom: string;
-  prenom?: string;
-  email?: string;
-  telephone?: string;
-  type?: 'particulier' | 'entreprise';
-  entreprise_id?: string;
-  statut?: string;
-  canal_acquisition?: string;
-  tags?: string[];
-  commentaires?: string;
+  prenom: string | null;
+  email: string | null;
+  telephone: string | null;
+  type: 'particulier' | 'entreprise';
+  entreprise_id: string | null;
+  statut: string | null;
+  canal_acquisition: string | null;
+  tags: string[] | null;
+  commentaires: string | null;
 }
 
 export const useContacts = () => {

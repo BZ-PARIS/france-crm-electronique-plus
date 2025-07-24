@@ -11,7 +11,7 @@ interface OrganizationMember {
   organization_id: string;
   user_id: string;
   role: string;
-  joined_at: string;
+  joined_at: string | null;
 }
 
 interface UseOrganizationReturn {

@@ -8,11 +8,11 @@ interface Profile {
   email: string;
   nom: string;
   prenom: string;
-  role: 'admin' | 'manager' | 'user';
-  fonction?: string;
-  telephone?: string;
-  statut?: string;
-  onboarding_completed?: boolean;
+  role: 'admin' | 'manager' | 'user' | null;
+  fonction: string | null;
+  telephone: string | null;
+  statut: string | null;
+  onboarding_completed: boolean | null;
 }
 
 interface AuthContextType {

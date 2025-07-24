@@ -28,7 +28,7 @@ export function EntrepriseDetailsDialog({ entreprise, open, onOpenChange }: Entr
                 <strong>Ville:</strong> {entreprise.code_postal} {entreprise.ville}
               </div>
             )}
-            {entreprise.site_web && <div><strong>Site web:</strong> {entreprise.site_web}</div>}
+            
             {entreprise.commentaires && <div><strong>Commentaires:</strong> {entreprise.commentaires}</div>}
           </div>
         )}

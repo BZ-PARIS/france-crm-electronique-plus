@@ -59,6 +59,7 @@ export function ContactForm() {
       statut: data.statut || null,
       canal_acquisition: data.canal_acquisition || null,
       commentaires: data.commentaires || null,
+      tags: null,
     };
 
     createContact(cleanData, {

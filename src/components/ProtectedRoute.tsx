@@ -28,7 +28,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Check role requirements
   if (requiredRole && profile) {
     const roleHierarchy = { admin: 3, manager: 2, user: 1 };
-    const userLevel = roleHierarchy[profile.role];
+    const userLevel = profile.role ? roleHierarchy[profile.role] : 0;
     const requiredLevel = roleHierarchy[requiredRole];
     
     if (userLevel < requiredLevel) {

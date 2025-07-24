@@ -70,7 +70,7 @@ export function EntrepriseEditForm({ entreprise, open, onOpenChange }: Entrepris
         adresse: entreprise.adresse || "",
         code_postal: entreprise.code_postal || "",
         ville: entreprise.ville || "",
-        site_web: entreprise.site_web || "",
+        
         secteur: entreprise.secteur || "",
         taille: entreprise.taille || "",
         type_relation: entreprise.type_relation || "client",

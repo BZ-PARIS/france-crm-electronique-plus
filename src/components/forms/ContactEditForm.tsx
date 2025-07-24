@@ -57,7 +57,7 @@ export function ContactEditForm({ contact, open, onOpenChange }: ContactEditForm
         prenom: contact.prenom || "",
         email: contact.email || "",
         telephone: contact.telephone || "",
-        type: contact.type,
+        type: contact.type || 'particulier',
         entreprise_id: contact.entreprise_id || "",
         statut: contact.statut || "",
         canal_acquisition: contact.canal_acquisition || "",

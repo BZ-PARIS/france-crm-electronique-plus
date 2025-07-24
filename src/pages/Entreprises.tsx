@@ -43,7 +43,7 @@ import {
   AlertTriangle
 } from "lucide-react"
 import { useEntreprises } from "@/hooks/useEntreprises"
-import { EntrepriseForm } from "@/components/forms/EntrepriseForm"
+import EntrepriseForm from "@/components/forms/EntrepriseForm"
 import { EntrepriseEditForm } from "@/components/forms/EntrepriseEditForm"
 import { EntrepriseDetailsDialog } from "@/components/details/EntrepriseDetailsDialog"
 import type { Entreprise } from "@/hooks/useEntreprises"
@@ -298,11 +298,11 @@ export default function Entreprises() {
                         <span className="text-muted-foreground text-sm">-</span>
                       )}
                     </TableCell>
-                    <TableCell>{getTypeBadge(entreprise.type_relation)}</TableCell>
+                    <TableCell>{getTypeBadge(entreprise.type_relation || undefined)}</TableCell>
                     <TableCell>
                       <div>
-                        <div>{getSecteurLabel(entreprise.secteur)}</div>
-                        <div className="text-sm text-muted-foreground">{getTailleLabel(entreprise.taille)}</div>
+                        <div>{getSecteurLabel(entreprise.secteur || undefined)}</div>
+                        <div className="text-sm text-muted-foreground">{getTailleLabel(entreprise.taille || undefined)}</div>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -338,11 +338,11 @@ export default function Entreprises() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onSelect={() => setViewEntreprise(entreprise)}>
+                          <DropdownMenuItem onSelect={() => setViewEntreprise({...entreprise, pays: null})}>
                             <Eye className="w-4 h-4 mr-2" />
                             Voir
                           </DropdownMenuItem>
-                          <DropdownMenuItem onSelect={() => setEditEntreprise(entreprise)}>
+                          <DropdownMenuItem onSelect={() => setEditEntreprise({...entreprise, pays: null})}>
                             <Edit className="w-4 h-4 mr-2" />
                             Modifier
                           </DropdownMenuItem>

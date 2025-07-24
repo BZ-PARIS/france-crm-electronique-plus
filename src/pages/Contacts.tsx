@@ -280,7 +280,7 @@ export default function Contacts() {
                         )}
                       </div>
                     </TableCell>
-                    <TableCell>{getTypeBadge(contact.type)}</TableCell>
+                    <TableCell>{getTypeBadge(contact.type || 'particulier')}</TableCell>
                     <TableCell>
                       {/* Relations Supabase typées dynamiquement */}
                       {(contact as ContactWithEntreprise).entreprises?.raison_sociale ? (
@@ -291,8 +291,8 @@ export default function Contacts() {
                         <span className="text-muted-foreground">-</span>
                       )}
                     </TableCell>
-                    <TableCell>{getStatusBadge(contact.statut)}</TableCell>
-                    <TableCell>{getSourceLabel(contact.canal_acquisition)}</TableCell>
+                    <TableCell>{getStatusBadge(contact.statut || undefined)}</TableCell>
+                    <TableCell>{getSourceLabel(contact.canal_acquisition || undefined)}</TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {contact.tags?.map((tag, index) => (

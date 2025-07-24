@@ -2,44 +2,26 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import type { Entreprise } from '@/types/domain';
 
-export interface Entreprise {
-  id: string;
-  raison_sociale: string;
-  siren?: string;
-  siret?: string;
-  secteur?: string;
-  taille?: string;
-  type_relation?: string;
-  adresse?: string;
-  ville?: string;
-  code_postal?: string;
-  site_web?: string;
-  tva?: string;
-  iban?: string;
-  bic?: string;
-  banque?: string;
-  commentaires?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+export { Entreprise };
 
 export interface CreateEntrepriseData {
   raison_sociale: string;
-  siren?: string;
-  siret?: string;
-  secteur?: string;
-  taille?: string;
-  type_relation?: string;
-  adresse?: string;
-  ville?: string;
-  code_postal?: string;
-  site_web?: string;
-  tva?: string;
-  iban?: string;
-  bic?: string;
-  banque?: string;
-  commentaires?: string;
+  siren: string | null;
+  siret: string | null;
+  secteur: string | null;
+  taille: string | null;
+  type_relation: string | null;
+  adresse: string | null;
+  ville: string | null;
+  code_postal: string | null;
+  pays: string | null;
+  tva: string | null;
+  iban: string | null;
+  bic: string | null;
+  banque: string | null;
+  commentaires: string | null;
 }
 
 export const useEntreprises = () => {
