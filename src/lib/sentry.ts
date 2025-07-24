@@ -8,7 +8,7 @@ export function captureException(error: unknown) {
   console.error('Captured error', error);
 }
 
-export class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode }> {
+export class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; children?: React.ReactNode }> {
   state = { hasError: false };
   static getDerivedStateFromError() {
     return { hasError: true };
@@ -20,6 +20,6 @@ export class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode 
     if (this.state.hasError) {
       return this.props.fallback || null;
     }
-    return this.props.children;
+    return this.props.children || null;
   }
 }

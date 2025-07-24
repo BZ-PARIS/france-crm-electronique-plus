@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '@sentry/react';
+import { ErrorBoundary } from '@/lib/sentry';
 import React from 'react';
 
 export function CRMErrorBoundary({ children }: { children: React.ReactNode }) {
